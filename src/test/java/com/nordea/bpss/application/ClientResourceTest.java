@@ -1,18 +1,27 @@
-package com.nordea.bpss.client;
+package com.nordea.bpss.application;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.*;
 
 public class ClientResourceTest {
 
     ClientResource resource = new ClientResource();
+
+    @Before
+    public void setup() throws URISyntaxException {
+        resource.uriInfo = mock(UriInfo.class);
+        when(resource.uriInfo.getAbsolutePath()).thenReturn(new URI("/mock"));
+    }
 
     @Test
     public void should_UA_not_valid_country() {
