@@ -1,0 +1,138 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.nordea.bpss</groupId>
+    <artifactId>client-service</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+    <name>client-service</name>
+	
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+        <logback.version>1.1.2</logback.version>
+        <slf4j.version>1.7.10</slf4j.version>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.1</version>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>1.9.5</version>
+            <scope>test</scope>
+        </dependency>
+
+		<!-- Java API -->
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>7.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <finalName>client-service</finalName>
+    </build>
+
+    <profiles>
+
+        <profile>
+            <id>wlsdeploy</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.oracle.weblogic</groupId>
+                        <artifactId>weblogic-maven-plugin</artifactId>
+                        <version>10.3.4</version>
+                        <configuration>
+                            <adminurl>${weblogic.url}</adminurl>
+                            <user>${weblogic.username}</user>
+                            <password>${weblogic.password}</password>
+                            <targets>${weblogic.targets}</targets>
+                            <upload>true</upload>
+                            <action>deploy</action>
+                            <remote>false</remote>
+                            <verbose>true</verbose>
+                            <source>${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
+                            <name>client-service</name>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>wlsUndeploy</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.oracle.weblogic</groupId>
+                        <artifactId>weblogic-maven-plugin</artifactId>
+                        <version>10.3.4</version>
+                        <configuration>
+                            <adminurl>${weblogic.url}</adminurl>
+                            <user>${weblogic.username}</user>
+                            <password>${weblogic.password}</password>
+                            <targets>${weblogic.targets}</targets>
+                            <action>undeploy</action>
+                            <remote>false</remote>
+                            <verbose>true</verbose>
+                            <name>client-service</name>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>clean</phase>
+                                <goals>
+                                    <goal>undeploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>wlsLocal</id>
+            <properties>
+                <weblogic.url>t3://localhost:7001</weblogic.url>
+                <weblogic.username>weblogic</weblogic.username>
+                <weblogic.password>weblogic1</weblogic.password>
+                <weblogic.targets>AdminServer</weblogic.targets>
+            </properties>
+        </profile>
+    </profiles>
+
+</project>

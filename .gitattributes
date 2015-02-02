@@ -1,0 +1,16 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text eol=lf
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+*.java text
+*.xml text
+*properties text
+*gitignore text
+*gitattributes text
+
+# Declare files that will always have CRLF line endings on checkout.
+#*.sln text eol=crlf
+
+*.jar binary
+*.war binary
