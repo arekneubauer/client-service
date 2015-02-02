@@ -35,7 +35,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.8.1</version>
+            <version>4.11</version>
             <scope>test</scope>
             <type>jar</type>
         </dependency>
@@ -48,6 +48,12 @@
 
 		<!-- Java API -->
         <dependency>
+            <groupId>org.glassfish.main.extras</groupId>
+            <artifactId>glassfish-embedded-all</artifactId>
+            <version>4.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>7.0</version>
@@ -58,72 +64,36 @@
 
     <build>
         <finalName>client-service</finalName>
+        <plugins>
+            <plugin>
+                <groupId>com.oracle.weblogic</groupId>
+                <artifactId>weblogic-maven-plugin</artifactId>
+                <version>10.3.4</version>
+                <configuration>
+                    <adminurl>${weblogic.url}</adminurl>
+                    <user>${weblogic.username}</user>
+                    <password>${weblogic.password}</password>
+                    <targets>${weblogic.targets}</targets>
+                    <upload>true</upload>
+                    <action>deploy</action>
+                    <remote>false</remote>
+                    <verbose>true</verbose>
+                    <source>${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
+                    <name>client-service</name>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
     <profiles>
-
-        <profile>
-            <id>wlsdeploy</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.oracle.weblogic</groupId>
-                        <artifactId>weblogic-maven-plugin</artifactId>
-                        <version>10.3.4</version>
-                        <configuration>
-                            <adminurl>${weblogic.url}</adminurl>
-                            <user>${weblogic.username}</user>
-                            <password>${weblogic.password}</password>
-                            <targets>${weblogic.targets}</targets>
-                            <upload>true</upload>
-                            <action>deploy</action>
-                            <remote>false</remote>
-                            <verbose>true</verbose>
-                            <source>${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
-                            <name>client-service</name>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <phase>install</phase>
-                                <goals>
-                                    <goal>deploy</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>wlsUndeploy</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.oracle.weblogic</groupId>
-                        <artifactId>weblogic-maven-plugin</artifactId>
-                        <version>10.3.4</version>
-                        <configuration>
-                            <adminurl>${weblogic.url}</adminurl>
-                            <user>${weblogic.username}</user>
-                            <password>${weblogic.password}</password>
-                            <targets>${weblogic.targets}</targets>
-                            <action>undeploy</action>
-                            <remote>false</remote>
-                            <verbose>true</verbose>
-                            <name>client-service</name>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <phase>clean</phase>
-                                <goals>
-                                    <goal>undeploy</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         <profile>
             <id>wlsLocal</id>
             <properties>
