@@ -7,10 +7,7 @@ import org.junit.runners.Parameterized;
 import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
 public class CustomerCountryTest {
@@ -19,8 +16,8 @@ public class CustomerCountryTest {
     public static Iterable<Object[]> params() {
         return Arrays.asList(new Object[][]{
                 {"PL", 1, CustomerCountry.PL},
-                {"EE", 6, CustomerCountry.EE},
-                {"LV", 4, CustomerCountry.LV},
+                {"EE", 4, CustomerCountry.EE},
+                {"LV", 3, CustomerCountry.LV},
                 {"LT", 2, CustomerCountry.LT}
         });
     }
