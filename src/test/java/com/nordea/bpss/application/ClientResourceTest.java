@@ -1,5 +1,6 @@
 package com.nordea.bpss.application;
 
+import com.nordea.bpss.client.Client;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,4 +35,16 @@ public class ClientResourceTest {
         Response r = resource.getClient("aaaaaa", "PL");
         assertThat(r.getStatus(), is(equalTo(Response.Status.BAD_REQUEST.getStatusCode())));
     }
+
+    @Test
+    public void should_get_valid_client() {
+        Response r = resource.getClient("105150", "PL");
+
+        assertThat(r.getStatus(), is(equalTo(Response.Status.OK.getStatusCode())));
+
+        Client client = r.readEntity(Client.class);
+        assertThat(client, is(notNull()));
+        assertThat(client.getClCusNo(), is(notNull()));
+    }
+
 }

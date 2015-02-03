@@ -23,7 +23,7 @@ public enum CustomerCountry {
         throw new IllegalArgumentException("Not such country code");
     }
 
-    public static boolean coutryExists(String country) {
+    public static boolean countryExists(String country) {
         for (CustomerCountry c: values()) {
             if (c.name() == country) {
                 return true;

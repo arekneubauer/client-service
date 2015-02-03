@@ -44,4 +44,16 @@ public class CustomerCountryTest {
         assertThat(CustomerCountry.byCountryCode(countryCode), is(equalTo(countryEnum)));
     }
 
+    @Test
+    public void country_exists() {
+        assertThat(CustomerCountry.countryExists(country), is(true));
+    }
+
+    @Test
+    public void country_not_exists() {
+        assertThat(CustomerCountry.countryExists("UA"), is(false));
+    }
+
+
+
 }
