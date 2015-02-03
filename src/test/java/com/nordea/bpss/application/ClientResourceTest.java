@@ -1,6 +1,8 @@
 package com.nordea.bpss.application;
 
 import com.nordea.bpss.client.Client;
+import com.nordea.bpss.client.ClientService;
+import com.nordea.bpss.client.CustomerCountry;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,6 +13,7 @@ import java.net.URISyntaxException;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 public class ClientResourceTest {
@@ -25,13 +28,25 @@ public class ClientResourceTest {
 
     @Test
     public void should_get_valid_client() {
-        Response r = resource.getClient("105150", "PL");
+        //given
+        final String clCusNo = "105150";
 
+        final Client mockClient = new Client();
+        mockClient.setClCusNo(clCusNo);
+
+        resource.service = mock(ClientService.class);
+        when(resource.service.getClient(anyString(), any(CustomerCountry.class)))
+                .thenReturn(mockClient);
+
+        //when
+        Response r = resource.getClient(clCusNo, "PL");
+
+        //then
         assertThat(r.getStatus(), is(equalTo(Response.Status.OK.getStatusCode())));
 
-        Client client = (Client) r.getEntity();
-        assertThat(client, is(notNullValue()));
-        assertThat(client.getClCusNo(), is(notNullValue()));
+        final Client returnedClient = (Client) r.getEntity();
+        assertThat(returnedClient, is(notNullValue()));
+        assertThat(returnedClient.getClCusNo(), is(notNullValue()));
     }
 
     @Test

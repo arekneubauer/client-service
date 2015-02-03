@@ -1,11 +1,13 @@
 package com.nordea.bpss.application;
 
 import com.nordea.bpss.client.Client;
+import com.nordea.bpss.client.ClientService;
 import com.nordea.bpss.client.CustomerCountry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -33,6 +35,9 @@ public class ClientResource {
 
     @Context
     UriInfo uriInfo;
+
+    @Inject
+    ClientService service;
     
     /**
      * Returns single Client data
@@ -57,7 +62,9 @@ public class ClientResource {
         }
 
         CustomerCountry customerCountry = CustomerCountry.valueOf(countryCode);
-        return Response.ok().entity(new Client()).build();
+
+        Client client = service.getClient(cusNo, customerCountry);
+        return Response.ok().entity(client).build();
     }
     
     /**
