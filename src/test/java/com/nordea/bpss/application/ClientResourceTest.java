@@ -50,13 +50,13 @@ public class ClientResourceTest {
     }
 
     @Test
-    public void should_UA_not_valid_country() {
+    public void should_get_fail_on_not_valid_country() {
         Response r = resource.getClient("105150", "UA");
         assertThat(r.getStatus(), is(equalTo(Response.Status.BAD_REQUEST.getStatusCode())));
     }
 
     @Test
-    public void should_not_validate_non_numeric_cust_number() {
+    public void should_get_fail_on_not_validate_non_numeric_cust_number() {
         Response r = resource.getClient("aaaaaa", "PL");
         assertThat(r.getStatus(), is(equalTo(Response.Status.BAD_REQUEST.getStatusCode())));
     }
