@@ -1,13 +1,15 @@
 package com.nordea.bpss.application;
 
+import com.nordea.bpss.client.AbstractClient;
 import com.nordea.bpss.client.Client;
 import com.nordea.bpss.client.ClientService;
 import com.nordea.bpss.client.CustomerCountry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -36,7 +38,7 @@ public class ClientResource {
     @Context
     UriInfo uriInfo;
 
-    @Inject
+    @EJB
     ClientService service;
     
     /**
@@ -63,7 +65,12 @@ public class ClientResource {
 
         CustomerCountry customerCountry = CustomerCountry.valueOf(countryCode);
 
-        Client client = service.getClient(cusNo, customerCountry);
+        AbstractClient client = service.getClient(cusNo, customerCountry);
+
+        if (client.isNull()) {
+            return Response.status(Status.NOT_FOUND).build();
+        }
+
         return Response.ok().entity(client).build();
     }
     
@@ -78,17 +85,22 @@ public class ClientResource {
     @Path("{country}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response postClient (@PathParam("country") String countryCode, Client client) {
+    public Response postClient (@PathParam("country") String countryCode, @Valid Client client) {
 
         LOG.info("Client posted at: {} ", uriInfo.getAbsolutePath());
-        String location = uriInfo.getAbsolutePath().toString();
 
+        if (!CustomerCountry.countryExists(countryCode)) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        final Client savedClient = service.saveClient(client);
         return Response
                 .status(Status.CREATED)
                 .location(UriBuilder.fromUri(uriInfo.getAbsolutePath())
-                        .path("{a}").path("{b}")
-                        .build(countryCode, client.getClCusNo()))
-                .entity("")
+                        .path("{country}").path("{customerId}")
+                        .build(CustomerCountry.byCountryCode(savedClient.getClCunitId().intValue()),
+                                savedClient.getClCusNo()))
+                .entity(savedClient)
                 .build();
     }
         
