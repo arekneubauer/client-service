@@ -30,25 +30,26 @@ public class ClientResourceIntegrationTest {
                 .resolve("ch.qos.logback:logback-classic").withTransitivity()
                 .asFile();
 
-        return ShrinkWrap.create(WebArchive.class)
+        WebArchive webArchive = ShrinkWrap.create(WebArchive.class)
                 .addAsLibraries(libs)
                 .addClasses(JAXRSConfiguration.class, ClientResource.class)
                 .addClasses(Client.class, ClientService.class, CustomerCountry.class)
                 .addAsWebInfResource(new File("src/main/webapp/WEB-INF", "weblogic.xml"))
-                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
+                .addAsResource(EmptyAsset.INSTANCE, "META-INF/beans.xml");
+
+        return webArchive;
     }
 
     @Test
     @RunAsClient
     public void should_create_fail_on_not_valid_client(@ArquillianResource URL baseUrl) {
 
-        System.out.println(baseUrl);
-
-        given().body("{}").contentType(ContentType.JSON)
-            .when()
-                .post(baseUrl + "1.0/clients/PL")
-            .then()
-                .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
+        given()
+            .body("{}").contentType(ContentType.JSON)
+        .when()
+            .post(baseUrl + "1.0/clients/PL")
+        .then()
+            .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
 
     }
 }

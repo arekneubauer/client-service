@@ -25,7 +25,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 @NamedQueries({
     @NamedQuery(name = "Client.findByClCusNoAndCunitId", query = "SELECT c FROM Client c WHERE c.clCusNo = :clCusNo AND c.clCunitId = :clCunitId"),
     @NamedQuery(name = "Client.findById", query = "SELECT c FROM Client c WHERE c.clId = :clId"),})
-public class Client implements Serializable {
+public class Client extends AbstractClient implements Serializable {
 
     private static final long serialVersionUID = -896688419334718092L;
 
@@ -307,5 +307,9 @@ public class Client implements Serializable {
     public String toString() {
         return "com.nordea.bpss.client.Client[ clId=" + clId + " ]";
     }
-    
+
+    @Override
+    public boolean isNull() {
+        return false;
+    }
 }

@@ -1,5 +1,6 @@
 package com.nordea.bpss.application;
 
+import com.nordea.bpss.client.AbstractClient;
 import com.nordea.bpss.client.Client;
 import com.nordea.bpss.client.ClientService;
 import com.nordea.bpss.client.CustomerCountry;
@@ -64,7 +65,12 @@ public class ClientResource {
 
         CustomerCountry customerCountry = CustomerCountry.valueOf(countryCode);
 
-        Client client = service.getClient(cusNo, customerCountry);
+        AbstractClient client = service.getClient(cusNo, customerCountry);
+
+        if (client.isNull()) {
+            return Response.status(Status.NOT_FOUND).build();
+        }
+
         return Response.ok().entity(client).build();
     }
     
