@@ -4,7 +4,10 @@ import com.nordea.bpss.client.Client;
 import com.nordea.bpss.client.ClientService;
 import com.nordea.bpss.client.CustomerCountry;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -62,23 +65,71 @@ public class ClientResourceTest {
     }
 
     @Test
-    public void should_fail_create_on_not_valid_country() {
+    public void should_create_fail_on_not_valid_country() {
         Response r = resource.postClient("UA", new Client());
         assertThat(r.getStatus(), is(equalTo(Response.Status.BAD_REQUEST.getStatusCode())));
     }
 
     @Test
-    public void should_fail_create_on_not_valid_client() {
+    @Ignore("Better to test on an application server")
+    public void should_create_fail_on_not_valid_client() {
         Response r = resource.postClient("PL", new Client());
         assertThat(r.getStatus(), is(equalTo(Response.Status.BAD_REQUEST.getStatusCode())));
     }
 
     @Test
     public void should_create_valid_client() {
-        Response r = resource.postClient("PL", new Client());
+        //given
+        final Short clCunitId = 1;
+        final String clCusNo = "105150";
 
+        final Client mockClient = new Client();
+        mockClient.setClCusNo(clCusNo);
+        mockClient.setClCunitId(clCunitId);
+
+        resource.service = mock(ClientService.class);
+        when(resource.service.saveClient(mockClient))
+                .thenReturn(mockClient);
+
+        //when
+        Response r = resource
+                .postClient(CustomerCountry.byCountryCode(clCunitId.intValue()).name(), mockClient);
+
+        //then
+        verify(resource.service).saveClient(mockClient);
+    }
+
+    @Test
+    public void should_create_with_valid_location() {
+        //given
+        final Short clCunitId = 1;
+        final String clCusNo = "105150";
+
+        final Client mockClient = new Client();
+        mockClient.setClCusNo(clCusNo);
+        mockClient.setClCunitId(clCunitId);
+
+        resource.service = mock(ClientService.class);
+        when(resource.service.saveClient(mockClient))
+                .thenAnswer(new Answer<Client>() {
+                    @Override
+                    public Client answer(InvocationOnMock invocation) throws Throwable {
+                        Client c = new Client();
+                        c.setClCusNo(mockClient.getClCusNo());
+                        c.setClCunitId(mockClient.getClCunitId());
+                        c.setClId(1l);
+                        return c;
+                    }
+                });
+
+        //when
+        Response r = resource
+                .postClient(CustomerCountry.byCountryCode(clCunitId.intValue()).name(), mockClient);
+
+        //then
         assertThat(r.getStatus(), is(equalTo(Response.Status.CREATED.getStatusCode())));
         assertThat(r.getLocation().getPath(), is(equalTo("/mock/PL/105150")));
+        assertThat(((Client)r.getEntity()).getClId(), is(equalTo(1l)));
     }
 
 }

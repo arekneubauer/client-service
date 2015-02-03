@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -78,17 +79,22 @@ public class ClientResource {
     @Path("{country}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response postClient (@PathParam("country") String countryCode, Client client) {
+    public Response postClient (@PathParam("country") String countryCode, @Valid Client client) {
 
         LOG.info("Client posted at: {} ", uriInfo.getAbsolutePath());
-        String location = uriInfo.getAbsolutePath().toString();
 
+        if (!CustomerCountry.countryExists(countryCode)) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        final Client savedClient = service.saveClient(client);
         return Response
                 .status(Status.CREATED)
                 .location(UriBuilder.fromUri(uriInfo.getAbsolutePath())
-                        .path("{a}").path("{b}")
-                        .build(countryCode, client.getClCusNo()))
-                .entity("")
+                        .path("{country}").path("{customerId}")
+                        .build(CustomerCountry.byCountryCode(savedClient.getClCunitId().intValue()),
+                                savedClient.getClCusNo()))
+                .entity(savedClient)
                 .build();
     }
         
