@@ -61,4 +61,24 @@ public class ClientResourceTest {
         assertThat(r.getStatus(), is(equalTo(Response.Status.BAD_REQUEST.getStatusCode())));
     }
 
+    @Test
+    public void should_fail_create_on_not_valid_country() {
+        Response r = resource.postClient("UA", new Client());
+        assertThat(r.getStatus(), is(equalTo(Response.Status.BAD_REQUEST.getStatusCode())));
+    }
+
+    @Test
+    public void should_fail_create_on_not_valid_client() {
+        Response r = resource.postClient("PL", new Client());
+        assertThat(r.getStatus(), is(equalTo(Response.Status.BAD_REQUEST.getStatusCode())));
+    }
+
+    @Test
+    public void should_create_valid_client() {
+        Response r = resource.postClient("PL", new Client());
+
+        assertThat(r.getStatus(), is(equalTo(Response.Status.CREATED.getStatusCode())));
+        assertThat(r.getLocation().getPath(), is(equalTo("/mock/PL/105150")));
+    }
+
 }

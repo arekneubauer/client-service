@@ -19,8 +19,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-import java.net.URI;
 
 /**
  * RESTful Client resource class
@@ -85,7 +85,9 @@ public class ClientResource {
 
         return Response
                 .status(Status.CREATED)
-                .location(URI.create(location))
+                .location(UriBuilder.fromUri(uriInfo.getAbsolutePath())
+                        .path("{a}").path("{b}")
+                        .build(countryCode, client.getClCusNo()))
                 .entity("")
                 .build();
     }
