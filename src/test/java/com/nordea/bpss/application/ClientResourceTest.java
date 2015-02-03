@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -25,6 +24,17 @@ public class ClientResourceTest {
     }
 
     @Test
+    public void should_get_valid_client() {
+        Response r = resource.getClient("105150", "PL");
+
+        assertThat(r.getStatus(), is(equalTo(Response.Status.OK.getStatusCode())));
+
+        Client client = (Client) r.getEntity();
+        assertThat(client, is(notNullValue()));
+        assertThat(client.getClCusNo(), is(notNullValue()));
+    }
+
+    @Test
     public void should_UA_not_valid_country() {
         Response r = resource.getClient("105150", "UA");
         assertThat(r.getStatus(), is(equalTo(Response.Status.BAD_REQUEST.getStatusCode())));
@@ -34,17 +44,6 @@ public class ClientResourceTest {
     public void should_not_validate_non_numeric_cust_number() {
         Response r = resource.getClient("aaaaaa", "PL");
         assertThat(r.getStatus(), is(equalTo(Response.Status.BAD_REQUEST.getStatusCode())));
-    }
-
-    @Test
-    public void should_get_valid_client() {
-        Response r = resource.getClient("105150", "PL");
-
-        assertThat(r.getStatus(), is(equalTo(Response.Status.OK.getStatusCode())));
-
-        Client client = r.readEntity(Client.class);
-        assertThat(client, is(notNull()));
-        assertThat(client.getClCusNo(), is(notNull()));
     }
 
 }

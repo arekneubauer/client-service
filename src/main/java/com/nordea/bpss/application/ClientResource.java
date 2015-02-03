@@ -57,7 +57,7 @@ public class ClientResource {
         }
 
         CustomerCountry customerCountry = CustomerCountry.valueOf(countryCode);
-        return Response.ok("").build();
+        return Response.ok().entity(new Client()).build();
     }
     
     /**
