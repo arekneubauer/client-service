@@ -1,21 +1,18 @@
 <?xml version="1.0"?>
 <arquillian xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://jboss.org/schema/arquillian"
-  xsi:schemaLocation="http://jboss.org/schema/arquillian http://www.jboss.org/schema/arquillian/arquillian_1_0.xsd">
+            xmlns="http://jboss.org/schema/arquillian"
+            xsi:schemaLocation="http://jboss.org/schema/arquillian http://www.jboss.org/schema/arquillian/arquillian_1_0.xsd">
 
-  <container qualifier="wls" default="true">
-    <configuration>
-      <property name="adminUrl">t3://localhost:7001</property>
-      <property name="adminUserName">weblogic</property>
-      <property name="adminPassword">welcome1</property>
-      <property name="target">AdminServer</property>
-      <property name="weblogicJarPath">
-        {middlewareHome}/wlserver/server/lib/weblogic.jar
-      </property>
-      <property name="wlHome">
-        {middlewareHome}/wlserver
-      </property>
-    </configuration>
-  </container>
+    <container qualifier="weblogic" default="true">
+        <configuration>
+            <property name="adminUrl">t3://localhost:7001</property>
+            <property name="adminUserName">weblogic</property>
+            <property name="adminPassword">weblogic1</property>
+            <property name="target">AdminServer</property>
+            <property name="wlHome">
+                /home/kubam/workspaces/szkolenia/workspaces/workspace_20150202-nordea/weblogic-docker/wls1213/wlserver
+            </property>
+        </configuration>
+    </container>
 
 </arquillian>

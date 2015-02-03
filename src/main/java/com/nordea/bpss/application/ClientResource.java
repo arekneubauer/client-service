@@ -6,8 +6,8 @@ import com.nordea.bpss.client.CustomerCountry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -37,7 +37,7 @@ public class ClientResource {
     @Context
     UriInfo uriInfo;
 
-    @Inject
+    @EJB
     ClientService service;
     
     /**
