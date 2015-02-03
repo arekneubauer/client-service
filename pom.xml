@@ -87,6 +87,9 @@
     <profiles>
         <profile>
             <id>wlsLocal</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <properties>
                 <weblogic.url>t3://localhost:7001</weblogic.url>
                 <weblogic.username>weblogic</weblogic.username>
