@@ -44,11 +44,11 @@ public class ClientResource {
     @GET
     @Path("{country}/{cusNo}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getClient (@PathParam("country") String countryCode, 
-                               @PathParam("cusNo") String cusNo) {
+    public Response getClient (@PathParam("cusNo") String cusNo,
+                               @PathParam("country") String countryCode) {
         
         LOG.info("Client requested at: {}", uriInfo.getAbsolutePath());
-        if (!CustomerCountry.coutryExists(countryCode)) {
+        if (!CustomerCountry.countryExists(countryCode)) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
@@ -56,8 +56,7 @@ public class ClientResource {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        CustomerCountry customerCountry = CustomerCountry.valueOf(cusNo);
-
+        CustomerCountry customerCountry = CustomerCountry.valueOf(countryCode);
         return Response.ok("").build();
     }
     
@@ -96,8 +95,8 @@ public class ClientResource {
     @Path("{country}/{cusNo}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response putClient (@PathParam("country") String countryCode,
-                               @PathParam("cusNo") String cusNo,
+    public Response putClient (@PathParam("cusNo") String cusNo,
+                               @PathParam("country") String countryCode,
                                Client client) {
 
         LOG.info("Client update requested at: {} ", uriInfo.getAbsolutePath());
