@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" ng-app="clientApp">
+<head>
+  <meta charset="utf-8">
+  <title>Client Service</title>
+  <link rel="stylesheet" href="bower_components/bootstrap-css/css/bootstrap.css">
+  <link rel="stylesheet" href="bower_components/bootstrap-css/css/css/bootstrap-theme.css">
+  <style>
+  body {
+    padding-top: 60px;
+  }
+  </style>
+</head>
+<body>
+  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  </div>
+
+<div class="container" ng-controller="ClientCtrl">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Clients</h3>
+    </div>
+    <div class="panel-body">
+      <form novalidate class="simple-form">
+        <div class="form-group">
+          <label for="clCunitId">Country</label>
+          <input country-converter type="text" class="form-control" id="clCunitId" placeholder="Enter country [PL|LT|LV|EE]" ng-model="client.clCunitId">
+        </div>
+        <div class="form-group">
+          <label for="clCustId">Client Number</label>
+          <input type="text" class="form-control" id="clCustId" placeholder="Client Number" ng-model="client.clCustId">
+        </div>
+        <div class="form-group">
+          <label for="clNationality">Nationality</label>
+          <input type="text" class="form-control" id="clNationality" placeholder="Nationality" ng-model="client.clNationality">
+        </div>
+        <div class="form-group">
+          <label for="clPerMaritalStat">Marital Status</label>
+          <input type="text" class="form-control" id="clPerMaritalStat" placeholder="Marital Status" ng-model="client.clPerMaritalStat">
+        </div>
+        <button type="button" class="btn btn-primary btn-xs"
+          ng-click="lookup(client)">Lookup client
+        </button>
+        <button type="button" class="btn btn-default btn-xs"
+          ng-click="save(client)">Save client data
+        </button>
+
+      </form>
+    </div>
+
+    <pre>client == {{ client | json }} </pre>
+
+  <footer>
+    <p class="text-muted">&copy; Nordea 2015</p>
+  </footer>
+</div>
+
+  <script src="bower_components/angularjs/angular.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script type="application/javascript" src="scripts/app.js"></script>
+</body></html>
