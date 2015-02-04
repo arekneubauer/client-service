@@ -1,0 +1,34 @@
+= Node + Bower dla aplikacji JavaEE
+
+Założenie: instalacje node.js i npm (niezależnie)
+
+npm init::
+Inicjacja aplikacji node.js. Utworzenie pakcage.json
+
+npm install bower --save-dev::
+Instalacja bower'a jako modułu developerskiego
+
+npm install {zależność} --save::
+Zależności to: `nodemon` i `express`
+Node monitor (automatyczny relead aplikacji) oraz express.js (framework webowy)
+
+touch .bowerrc::
+Plik konfiguracyjny bowera, wskazujący lokalizację aplikacji
+```
+{
+  "directory": "app/bower_components"
+}
+```
+
+bower init::
+Inicjalizacja projektu bower
+
+bower install {pakiet} --save::
+Pakiety: `bootstrap`, `bootstrap-css`, `angular` i `angular-resource`
+
+Mock server::
+Aplikacja /app.js
+Uruchamiana poprzez: node ./app.js albo npm start
+
+Złożenie jar::
+mvn clean package
