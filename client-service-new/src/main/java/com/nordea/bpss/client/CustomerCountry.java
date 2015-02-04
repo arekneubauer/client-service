@@ -25,7 +25,7 @@ public enum CustomerCountry {
 
     public static boolean countryExists(String country) {
         for (CustomerCountry c: values()) {
-            if (c.name() == country) {
+            if (c.name().equals(country)) {
                 return true;
             }
         }

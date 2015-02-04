@@ -52,4 +52,23 @@ public class ClientResourceIntegrationTest {
             .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
 
     }
+
+    @Test
+    @RunAsClient
+    //cause c.name().equals(country) is not the same as
+    //c.name() == country
+    //Java(TM) SE Runtime Environment (build 1.8.0_25-b17)
+    //Java HotSpot(TM) 64-Bit Server VM (build 25.25-b02, mixed mode)
+    // vs.
+    //Java(TM) SE Runtime Environment (build 1.8.0_25-b17)
+    //Java HotSpot(TM) 64-Bit Server VM (build 25.25-b02, mixed mode)
+
+    public void should_get_valid_client(@ArquillianResource URL baseUrl) {
+
+            when()
+                    .get(baseUrl + "1.0/clients/PL/105150")
+            .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+
+    }
 }
