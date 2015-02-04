@@ -1,4 +1,7 @@
+nb*
+*log
 /logs
 /target
 *.iml
 .idea
+target
